@@ -1,0 +1,45 @@
+WEEK 7 - TUTORIAL 7
+Bug Report & Fix Documentation
+
+BUGS FOUND IN main.py
+----------------------
+1. Missing import
+   The line "from ____ import ____" was left blank, so calculate_total()
+   from food_order.py was never imported and could not be used.
+
+2. Total never calculated
+   The line "total = ____" was left blank. The program printed a payment
+   amount without ever calling calculate_total(), so it would crash with
+   a NameError as soon as it reached the print statement.
+
+3. No input validation / error handling
+   If the customer entered a negative price, a negative quantity, or
+   non-numeric text (e.g. letters), the program would crash immediately
+   with an unhandled ValueError instead of showing a proper error
+   message. This matches the customer complaints that "the ordering
+   system sometimes crashes or accepts invalid orders".
+
+FIXES APPLIED
+-------------
+1. Added "from food_order import calculate_total" to main.py.
+2. Assigned "total = calculate_total(price, quantity)" so the total is
+   correctly computed before printing.
+3. Wrapped the input and calculation logic in a try/except block that
+   catches ValueError, so invalid input (negative numbers or non-numeric
+   text) now prints a friendly "Invalid input: ..." message instead of
+   crashing the program.
+4. Added validation inside calculate_total() in food_order.py:
+   - Raises ValueError("invalid price") if price < 0
+   - Raises ValueError("invalid quantity") if quantity < 0
+   This stops the system from accepting invalid orders.
+
+TESTING
+-------
+Ran "pytest" in the week_7 directory after installing pytest
+(pip install pytest). All 6 tests in test_food_order.py passed:
+- food_order(10, 2) == 20
+- food_order(10, 3) == 30
+- food_order(20, 5) == 100
+- food_order(5, 2) == 10
+- food_order(-5, 2) raises ValueError (invalid price)
+- food_order(5, -2) raises ValueError (invalid quantity)
